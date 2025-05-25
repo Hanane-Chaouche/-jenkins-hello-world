@@ -1,52 +1,41 @@
 pipeline {
-    agent any // Utilise n'importe quel agent (Windows ou Linux)
+    agent any // Utilise n'importe quel agent disponible sur Jenkins (Windows)
+
+    environment {
+        // Déclare ici les variables d'environnement spécifiques à Windows
+        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-17'               // Chemin vers ton JDK 17 local
+        PYTHON_HOME = 'C:\\Program Files\\Python312'                // Chemin vers ton Python 3.12 local
+        PATH = "${env.PATH};${JAVA_HOME}\\bin;${PYTHON_HOME}"      // Ajoute Java et Python au PATH
+    }
 
     stages {
 
-        // Étape 1 : Récupération du code depuis GitHub
+        // Étape 1 : Récupère le code source depuis ton dépôt GitHub
         stage('Checkout') {
             steps {
-                // Clone depuis ton dépôt GitHub sur la branche main
+                // Cloner la branche main de ton dépôt GitHub
                 git branch: 'main', url: 'https://github.com/Hanane-Chaouche/-jenkins-hello-world.git'
             }
         }
 
-        // Étape 2 : Compilation et exécution des programmes
+        // Étape 2 : Compile et exécute les programmes Java et Python
         stage('Build') {
             steps {
                 script {
-                    // Si le système est Linux
-                    if (isUnix()) {
-                        withEnv([
-                            // Définir JAVA_HOME et PYTHON_HOME pour Linux
-                            "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64",
-                            "PYTHON_HOME=/usr/bin",
-                            "PATH=${env.PATH}:${JAVA_HOME}/bin:${PYTHON_HOME}"
-                        ]) {
-                            // Affichage et exécution des commandes Unix
-                            sh 'echo "Running on Unix"'
-                            sh 'javac HelloWorld.java'        // Compilation Java
-                            sh 'java HelloWorld'              // Exécution Java
-                            sh 'python3 hello.py'             // Exécution Python
-                        }
+                    // Affiche que le script s'exécute sur Windows
+                    bat 'echo "Running on Windows"'
 
-                    // Sinon, c’est Windows
-                    } else {
-                        withEnv([
-                            // Chemins personnalisés selon ta machine Windows
-                            "JAVA_HOME=C:\\Program Files\\Java\\jdk-17",
-                            "PYTHON_HOME=C:\\Program Files\\Python312",
-                            "PATH=${env.PATH};${JAVA_HOME}\\bin;${PYTHON_HOME}"
-                        ]) {
-                            // Affichage et exécution des commandes Windows
-                            bat 'echo "Running on Windows"'
-                            bat 'javac HelloWorld.java'       // Compilation Java
-                            bat 'java HelloWorld'             // Exécution Java
-                            bat 'python hello.py'             // Exécution Python
-                        }
-                    }
+                    // Compilation du fichier Java
+                    bat 'javac HelloWorld.java'
+
+                    // Exécution du programme Java
+                    bat 'java HelloWorld'
+
+                    // Exécution du script Python
+                    bat 'python hello.py'
                 }
             }
         }
     }
 }
+
