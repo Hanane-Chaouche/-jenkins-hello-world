@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Déclare ici les variables d'environnement spécifiques à Windows
-        JAVA_HOME = 'C:\Program Files\Java\jdk-17\bin\java.exe'          // Chemin vers ton JDK 17 local
+        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-17'          // Chemin vers ton JDK 17 local
         PYTHON_HOME = 'C:\\Program Files\\Python312'                // Chemin vers ton Python 3.12 local
         PATH = "${env.PATH};${JAVA_HOME}\\bin;${PYTHON_HOME}"      // Ajoute Java et Python au PATH
     }
