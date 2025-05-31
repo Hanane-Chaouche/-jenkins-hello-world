@@ -26,7 +26,7 @@ pipeline {
                     bat 'echo "Running on Windows"'
 
                     // Compilation du fichier Java
-                    bat 'javac HelloWorld.java'
+                    bat 'javac --release 8 HelloWorld.java'
 
                     // Exécution du programme Java
                     bat 'java HelloWorld'
